@@ -45,6 +45,28 @@ namespace Game1
             tileArray[x, y] = nTile;
         }
 
+        public HashSet<TileLoc> TilesOnLine (TileLoc p0, TileLoc p1){
+            HashSet<TileLoc> result = new HashSet<TileLoc>();
+            float dX = p1.x - p0.x;
+            float dY = p1.y - p0.y;
+            float error = 0;
+            float deltaerr = Math.Abs(dY / dX);
+            int y = p0.y;
+
+            for (int x = p0.x; x <= p1.x; x++)
+            {
+                result.Add(new TileLoc(x, y));
+                error = error + deltaerr;
+                while (error >= .5f)
+                {
+                    result.Add(new TileLoc(x, y));
+                    y = y + Math.Sign(p1.y - p0.y);
+                    error = error - 1;
+                }
+            }
+            return result;
+        }
+
 
 
     }
