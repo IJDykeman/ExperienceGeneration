@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Game1
 {
@@ -12,17 +13,17 @@ namespace Game1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Map world;
+        World world;
         int screenWidth = 1500;
         int screenHeight = 800;
-        int pixelWidthOfTile = 20;
 
         public Game1()
         {
             
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            world = new Map(screenWidth/pixelWidthOfTile, screenHeight/pixelWidthOfTile);
+            int pixelWidthOfTile = 20;
+            world = new World(screenWidth / pixelWidthOfTile, screenHeight / pixelWidthOfTile, pixelWidthOfTile);
         }
 
         protected override void Initialize()
@@ -32,7 +33,7 @@ namespace Game1
             graphics.PreferredBackBufferWidth = screenWidth;
             graphics.PreferredBackBufferHeight = screenHeight;   
             graphics.ApplyChanges();
-            world.initialize();
+            this.IsMouseVisible = true;
             Primitives.initialize(graphics.GraphicsDevice);
         }
 
@@ -49,7 +50,7 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-
+            world.update();
             base.Update(gameTime);
         }
 
@@ -58,10 +59,12 @@ namespace Game1
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin();
-            Drawer.draw(world, spriteBatch, graphics, tileWidth: pixelWidthOfTile);
-            Primitives.drawRectangle(new Rectangle(Mouse.GetState().X, Mouse.GetState().Y,30,30),Color.White, spriteBatch, graphics.GraphicsDevice);
+            Vector2 mouseLoc = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            world.update(mouseLoc);
+            world.highlightSquare(world.toMapLoc(new Vector2(Mouse.GetState().X, Mouse.GetState().Y)));
+
+            world.draw(spriteBatch, graphics);
             spriteBatch.End();
            
             base.Draw(gameTime);

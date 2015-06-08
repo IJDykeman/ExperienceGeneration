@@ -21,11 +21,6 @@ namespace Game1
 
         }
 
-        public void initialize()
-        {
-            new WeightedRandomGenerator().fill(this);
-        }
-
         public int getWidth()
         {
             return width;
@@ -40,34 +35,37 @@ namespace Game1
         {
             return tileArray[x, y];
         }
+
+        public Tiles.Types getTile(TileLoc loc)
+        {
+            return tileArray[loc.x, loc.y];
+        }
+
         public void setTile(int x, int y, Tiles.Types nTile)
         {
-            tileArray[x, y] = nTile;
-        }
-
-        public HashSet<TileLoc> TilesOnLine (TileLoc p0, TileLoc p1){
-            HashSet<TileLoc> result = new HashSet<TileLoc>();
-            float dX = p1.x - p0.x;
-            float dY = p1.y - p0.y;
-            float error = 0;
-            float deltaerr = Math.Abs(dY / dX);
-            int y = p0.y;
-
-            for (int x = p0.x; x <= p1.x; x++)
+            if (withinMap(new TileLoc(x, y)))
             {
-                result.Add(new TileLoc(x, y));
-                error = error + deltaerr;
-                while (error >= .5f)
-                {
-                    result.Add(new TileLoc(x, y));
-                    y = y + Math.Sign(p1.y - p0.y);
-                    error = error - 1;
-                }
+                tileArray[x, y] = nTile;
             }
-            return result;
         }
 
 
 
+        public bool withinMap(TileLoc loc)
+        {
+            return loc.x >= 0 && loc.x < width && loc.y >= 0 && loc.y < height;
+        }
+
+
+
+
+        public bool isOpaque(TileLoc loc)
+        {
+            if (withinMap(loc))
+            {
+                return Tiles.isOpaque(getTile(loc));
+            }
+            return false;
+        }
     }
 }
