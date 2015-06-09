@@ -57,6 +57,22 @@ namespace Game1
             }
         }
 
+        public Dictionary<Tiles.Types, float> getTileRatios()
+        {
+            Dictionary<Tiles.Types, float> result = new Dictionary<Tiles.Types, float>();
+            int totalTilesSeen = 0;
+            foreach (Tiles.Types type in allTypesSeen()){
+                totalTilesSeen += getNumSeen(type);
+                result[type] = getNumSeen(type);
+            }
+            //normalize counts to get ratios
+            foreach (Tiles.Types type in allTypesSeen())
+            {
+                result[type] /= (float)totalTilesSeen;
+            }
+            return result;
+        }
+
         public IEnumerable<Tiles.Types> allTypesSeen()
         {
             return visibleTileCounts.Keys.AsEnumerable<Tiles.Types>();

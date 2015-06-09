@@ -34,9 +34,13 @@ namespace Game1
                 
             }
             int i=1;
-            foreach (Tiles.Types type in metrics.allTypesSeen()){
-                int barHeight = 15;
-                Primitives.drawRectangle(new Rectangle(0,i*barHeight,metrics.getNumSeen(type)*barHeight,barHeight),Tiles.colorOf(type), spriteBatch,graphics.GraphicsDevice);
+            Dictionary<Tiles.Types,float> ratios = metrics.getTileRatios();
+            int barHeight = 15;
+            int barWidth = 700;
+            Primitives.drawRectangle(new Rectangle(0, 0, barWidth+20,barHeight*ratios.Keys.Count+20), Color.White, spriteBatch, graphics.GraphicsDevice);
+            foreach (Tiles.Types type in ratios.Keys){
+
+                Primitives.drawRectangle(new Rectangle(0, i * barHeight, (int)(ratios[type] * barWidth), barHeight), Tiles.colorOf(type), spriteBatch, graphics.GraphicsDevice);
                 i++;
             }
             
