@@ -8,16 +8,16 @@ namespace Game1
 {
     class TileMetrics
     {
-        Dictionary<Tiles.Types, int> visibleTileCounts;
+        Dictionary<Tiles.Types, float> visibleTileCounts;
         TileLoc loc;
 
         public TileMetrics(TileLoc nloc)
         {
-            visibleTileCounts = new Dictionary<Tiles.Types, int>();
+            visibleTileCounts = new Dictionary<Tiles.Types, float>();
             loc = nloc;
         }
 
-        public TileMetrics(TileLoc nloc, Dictionary<Tiles.Types, int> nvisibleTileCounts)
+        public TileMetrics(TileLoc nloc, Dictionary<Tiles.Types, float> nvisibleTileCounts)
         {
             loc = nloc;
             visibleTileCounts = nvisibleTileCounts;
@@ -26,26 +26,29 @@ namespace Game1
         public TileMetrics(TileLoc nloc, IEnumerable tilesSeen)
         {
             loc = nloc;
-            visibleTileCounts = new Dictionary<Tiles.Types, int>();
+            visibleTileCounts = new Dictionary<Tiles.Types, float>();
             foreach (Tile tile in tilesSeen)
             {
-                recordSeenTile(tile.getTileType());
+                recordSeenTile(tile.getTileType(), 100.0f/(float)Math.Pow(TileLoc.distance(nloc,tile.loc),2));
             }
         }
 
-        public void recordSeenTile(Tiles.Types type)
+        public void recordSeenTile(Tiles.Types type, float weight)
         {
+            if (type == Tiles.Types.floor){
+                return;
+            }
             if (!visibleTileCounts.ContainsKey(type))
             {
-                visibleTileCounts[type] = 1;
+                visibleTileCounts[type] = weight;
             }
             else
             {
-                visibleTileCounts[type]++;
+                visibleTileCounts[type] += weight;
             }
         }
 
-        public int getNumSeen(Tiles.Types type)
+        public float getEmotionalWeight(Tiles.Types type)
         {
             if (!visibleTileCounts.ContainsKey(type))
             {
@@ -60,10 +63,10 @@ namespace Game1
         public Dictionary<Tiles.Types, float> getTileRatios()
         {
             Dictionary<Tiles.Types, float> result = new Dictionary<Tiles.Types, float>();
-            int totalTilesSeen = 0;
+            float totalTilesSeen = 0;
             foreach (Tiles.Types type in allTypesSeen()){
-                totalTilesSeen += getNumSeen(type);
-                result[type] = getNumSeen(type);
+                totalTilesSeen += getEmotionalWeight(type);
+                result[type] = getEmotionalWeight(type);
             }
             //normalize counts to get ratios
             foreach (Tiles.Types type in allTypesSeen())

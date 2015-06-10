@@ -15,5 +15,10 @@ namespace Game1
             x = nx;
             y = ny;
         }
+
+        public static float distance(TileLoc l1, TileLoc l2)
+        {
+            return (float)Math.Sqrt(Math.Pow((l1.x - l2.x), 2) + Math.Pow((l1.y - l2.y), 2));
+        }
     }
 }
