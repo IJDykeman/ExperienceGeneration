@@ -20,10 +20,10 @@ namespace Game1
 
         static Tiles()
         {
-            tileAttributes[(int)Types.floor] = new TilePropterties(Types.floor, Color.Gray, false);
-            tileAttributes[(int)Types.wall] = new TilePropterties(Types.wall, Color.Black, true);
-            tileAttributes[(int)Types.monster] = new TilePropterties(Types.monster, Color.Green, false);
-            tileAttributes[(int)Types.treasure] = new TilePropterties(Types.treasure, Color.Gold, false);
+            tileAttributes[(int)Types.floor] = new TilePropterties(Types.floor, Color.Gray, false, false);
+            tileAttributes[(int)Types.wall] = new TilePropterties(Types.wall, Color.Black, true, false);
+            tileAttributes[(int)Types.monster] = new TilePropterties(Types.monster, Color.Green, false, true);
+            tileAttributes[(int)Types.treasure] = new TilePropterties(Types.treasure, Color.Gold, false, true);
         }
 
         public static Array getAllTileTypes(){
@@ -39,7 +39,13 @@ namespace Game1
         {
             return tileAttributes[(int)type].opaque;
         }
+
+        public static bool isInteresting(Types type)
+        {
+            return tileAttributes[(int)type].interesting;
+        }
          
+
         public static Tile getTileFromType(Types type, TileLoc loc){
             return new Tile(loc,tileAttributes[(int)type]);
         }

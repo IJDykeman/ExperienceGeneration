@@ -10,12 +10,14 @@ namespace Game1
     {
         public Color color;
         public bool opaque;
+        public bool interesting;
         Tiles.Types type;
-        public TilePropterties(Tiles.Types ntype, Color nColor, bool nOpaque)
+        public TilePropterties(Tiles.Types ntype, Color nColor, bool nOpaque, bool ninteresting)
         {
             type = ntype;
             color = nColor;
             opaque = nOpaque;
+            interesting = ninteresting;
         }
 
         public Tiles.Types getType()

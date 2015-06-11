@@ -35,9 +35,10 @@ namespace Game1
 
         public void recordSeenTile(Tiles.Types type, float weight)
         {
-            if (type == Tiles.Types.floor){
+            if (!Tiles.isInteresting(type)){
                 return;
             }
+
             if (!visibleTileCounts.ContainsKey(type))
             {
                 visibleTileCounts[type] = weight;
@@ -68,6 +69,11 @@ namespace Game1
                 totalTilesSeen += getEmotionalWeight(type);
                 result[type] = getEmotionalWeight(type);
             }
+
+            if (totalTilesSeen == 0){
+                return result;
+            }
+
             //normalize counts to get ratios
             foreach (Tiles.Types type in allTypesSeen())
             {

@@ -22,7 +22,7 @@ namespace Game1
             
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            int pixelWidthOfTile = 20;
+            int pixelWidthOfTile = 10;
             world = new World(screenWidth / pixelWidthOfTile, screenHeight / pixelWidthOfTile, pixelWidthOfTile);
         }
 

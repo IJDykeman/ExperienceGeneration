@@ -18,7 +18,7 @@ namespace Game1
         public World(int width, int height, int npixelWidthOfTile)
         {
             map = new Map(width, height);
-            new WeightedRandomGenerator().fill(map);
+            new DrunkenLeapingGenerator().fill(map);
             pixelWidthOfTile = npixelWidthOfTile;
             highlightedSquares = new HashSet<TileLoc>();
         }
@@ -89,8 +89,9 @@ namespace Game1
             return result;
         }
 
-        public IEnumerable tilesOnLineIterator(TileLoc from, TileLoc to)
+        public static IEnumerable tileLocsOnLineIterator(TileLoc from, TileLoc to, Map mapToUse)
         {
+            
             int x = from.x;
             int y = from.y;
             int x2 = to.x;
@@ -113,10 +114,9 @@ namespace Game1
             int numerator = longest >> 1;
             for (int i = 0; i <= longest; i++)
             {
-                if (map.withinMap(new TileLoc(x, y)))
-                {
-                    yield return getTileFromTypeAndLoc(new TileLoc(x, y));
-                }
+
+                yield return new TileLoc(x, y);
+
                 numerator += shortest;
                 if (!(numerator < longest))
                 {
@@ -132,8 +132,20 @@ namespace Game1
             }
         }
 
+        public IEnumerable tilesOnLineIterator(TileLoc from, TileLoc to)
+        {
+            foreach (TileLoc loc in tileLocsOnLineIterator(from,to,map)){
+                if (map.withinMap(loc))
+                {
+                    yield return getTileFromTypeAndLoc(loc);
+                }
+            }
+             
+        }
+
         bool tileVisibleFrom(TileLoc eye, TileLoc target)
         {
+
             List<Tile> sightLine = tilesOnLine(eye, target);
             for (int i=0; i<sightLine.Count-1; i++){
                 if (map.isOpaque(sightLine[i].loc)){

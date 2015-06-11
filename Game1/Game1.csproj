@@ -46,6 +46,7 @@
     <Compile Include="Tile.cs" />
     <Compile Include="TileLoc.cs" />
     <Compile Include="TileMetrics.cs" />
+    <Compile Include="DrunkenLeapingGenerator.cs" />
     <Compile Include="WeightedRandomGenerator.cs" />
     <Compile Include="RandomGenerator.cs" />
     <Compile Include="TilePropterties.cs" />
